@@ -74,41 +74,53 @@ if __name__ == "__main__":
     parser.add_argument('--vir_train_set',
         help='Virus train set fasta file',
         required = True)
-
     parser.add_argument('--bac_train_set',
         help='Bacteria train set fasta file',
         required = True)
-
+    parser.add_argument('--vir_test_set',
+        help='Virus test set fasta file',
+        required = True)
+    parser.add_argument('--bac_test_set',
+        help='Bacteria test set fasta file',
+        required = True)
     parser.add_argument('--batch_size',
         default = 4,
+        type=int,
         help='Batch size')
 
     parser.add_argument('--learning_rate',
         default = 0.3,
+        type=float,
         help='Learning rate')
 
     parser.add_argument('--n_epochs',
         default = 50,
+        type=int,
         help='Number of epochs')
 
     parser.add_argument('--train_fragment_length',
-        default = 300,
+        default = 1000,
+        type=int,
         help='Fragment length')
 
     parser.add_argument('--conv_layers_num',
         default=10,
+        type=int,
         help='Number of convolutional modules')
 
     parser.add_argument('--conv_kernel_size',
         default=5,
+        type=int,
         help='Number of convolutional modules')
 
     parser.add_argument('--pool_kernel_size',
         default=4,
+        type=int,
         help='Number of convolutional modules')
 
     parser.add_argument('--cnn_type',
         default=2,
+        type=int,
         help='Type of CNN')
 
     # dilation

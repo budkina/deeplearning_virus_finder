@@ -15,7 +15,7 @@ class Trainer:
         else:
             self.device = torch.device("cpu")
 
-
+        print(self.device)
         self.model = model.to(self.device)
         self.optimizer = optim.Adam(self.model.parameters(), lr=learning_rate)
         self.criterion = nn.CrossEntropyLoss()

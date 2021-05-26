@@ -7,7 +7,6 @@ import torch.nn.functional as F
 import time
 
 import argparse
-from gensim.models import Word2Vec
 import multiprocessing
 
 class CNN(nn.Module):
@@ -43,9 +42,7 @@ class CNN(nn.Module):
 
         size_after_conv = (self.fragment_length + 2*0 - conv_dilation*(self.conv_kernel_size-1) - 1) / conv_stride + 1
         size_after_pool = (size_after_conv + 2*0 - pool_dilation*(self.pool_kernel_size-1) - 1) / pool_stride + 1
-
         self.fc_size = int(size_after_pool)*self.conv_layers_num
-
         self.fc_forward = nn.Linear(self.fc_size, 2)
         self.fc_reverse = nn.Linear(self.fc_size, 2)
 
@@ -56,7 +53,7 @@ class CNN(nn.Module):
         conv_result_reverse=self.conv1_reverse(x_reverse)
         relu_result_forward = F.relu(conv_result_forward)
         relu_result_reverse = F.relu(conv_result_reverse)
-        pooling_result_forward = self.pool_forward(relu_result_forward)      
+        pooling_result_forward = self.pool_forward(relu_result_forward)
         pooling_result_reverse = self.pool_reverse(relu_result_reverse)
         fc_result_forward = self.fc_forward(pooling_result_forward.view(-1, self.fc_size))
         fc_result_reverse = self.fc_reverse(pooling_result_reverse.view(-1, self.fc_size))
