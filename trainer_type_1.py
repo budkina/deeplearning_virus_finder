@@ -4,9 +4,11 @@ import torch
 import dataset_type_1
 from torch.utils.data import DataLoader
 from sklearn import metrics
+import logging
+import sys
 
 class Trainer:
-    def __init__(self, model_forward, model_reverse, learning_rate, optimizer=None, criterion=None):
+    def __init__(self, model_forward, model_reverse, fr_result, learning_rate, optimizer=None, criterion=None):
 
         # Select device
         if torch.cuda.is_available():
@@ -17,18 +19,16 @@ class Trainer:
 
         self.model_forward = model_forward.to(self.device)
         self.model_reverse = model_reverse.to(self.device)
+        self.fr_result = fr_result
         self.optimizer_forward = optim.Adam(self.model_forward.parameters(), lr=learning_rate)
         self.optimizer_reverse = optim.Adam(self.model_reverse.parameters(), lr=learning_rate)
         self.criterion_forward = nn.CrossEntropyLoss()
         self.criterion_reverse= nn.CrossEntropyLoss()
 
-
-
-
     def fit_strand_specific(self, model, train_dataloader, optimizer, criterion, n_epochs):
         model.train()
         for epoch in range(n_epochs):
-            print(F"epoch: {epoch}")
+            logging.debug(F"epoch: {epoch}")
             epoch_loss = 0
             for x_batch, y_batch in train_dataloader:
                 optimizer.zero_grad()
@@ -38,9 +38,9 @@ class Trainer:
                 optimizer.step()
                 epoch_loss += loss.item()
 
-        print("Fit completed. Model parameters:")
+        logging.debug("Fit completed. Model parameters:")
         for param in model.parameters():
-            print(param)
+            logging.debug(param)
 
 
     def fit(self, vir_train_set, bac_train_set, batch_size, n_epochs):
@@ -84,9 +84,6 @@ class Trainer:
 
         roc = metrics.roc_auc_score(labels, pred)
 
-    
-
-
         precision, recall, f1, _ = metrics.precision_recall_fscore_support(labels, pred_classes, average='binary')
         f1 = metrics.f1_score(labels, pred_classes)
         accuracy = metrics.accuracy_score(labels, pred_classes)
@@ -105,15 +102,19 @@ class Trainer:
 
             for x_batch, y_batch in test_forward_loader:
                 output = self.model_forward(x_batch)
-
-
                 all_outputs_forward = torch.cat((all_outputs_forward,output),0)
 
             for x_batch, y_batch in test_reverse_loader:
                 output = self.model_reverse(x_batch)
                 all_outputs_reverse = torch.cat((all_outputs_reverse,output),0)
 
-            result = (all_outputs_reverse + all_outputs_forward)/2
+            if self.fr_result == "average":
+                result = (all_outputs_reverse + all_outputs_forward)/2
+            elif self.fr_result == "max":
+                result = max(all_outputs_reverse, all_outputs_forward)
+            else:
+                logging.error("Unknown fr_result")
+                sys.exit()
 
         return result
 

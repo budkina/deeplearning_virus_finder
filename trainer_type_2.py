@@ -3,8 +3,8 @@ import torch.optim as optim
 import torch
 import dataset_type_2
 from torch.utils.data import DataLoader
-
 from sklearn import metrics
+import logging
 
 class Trainer:
     def __init__(self, model, learning_rate, optimizer=None, criterion=None):
@@ -15,7 +15,6 @@ class Trainer:
         else:
             self.device = torch.device("cpu")
 
-        print(self.device)
         self.model = model.to(self.device)
         self.optimizer = optim.Adam(self.model.parameters(), lr=learning_rate)
         self.criterion = nn.CrossEntropyLoss()
@@ -34,7 +33,7 @@ class Trainer:
 
         self.model.train()
         for epoch in range(n_epochs):
-            print(F"epoch: {epoch}")
+            logging.debug(F"epoch: {epoch}")
             epoch_loss = 0
             for (x_batch_forward, y_batch),(x_batch_reverse,_) in zip(train_forward_loader, train_reverse_loader):
                 self.optimizer.zero_grad()
@@ -44,9 +43,9 @@ class Trainer:
                 self.optimizer.step()
                 epoch_loss += loss.item()
 
-        print("Fit completed. Model parameters:")
+        logging.debug("Fit completed. Model parameters:")
         for param in self.model.parameters():
-            print(param)
+            logging.debug(param)
 
     def predict_proba(self, test_forward_loader, test_reverse_loader):
         self.model.eval()
@@ -77,9 +76,6 @@ class Trainer:
         labels = test_forward_dataset.Y.numpy()
 
         roc = metrics.roc_auc_score(labels, pred)
-
-    
-
 
         precision, recall, f1, _ = metrics.precision_recall_fscore_support(labels, pred_classes, average='binary')
         f1 = metrics.f1_score(labels, pred_classes)
