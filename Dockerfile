@@ -4,11 +4,6 @@ RUN conda config --add channels defaults
 RUN conda config --add channels bioconda
 RUN conda config --add channels conda-forge
 
-RUN conda install pytorch
-
-RUN conda install biopython
-RUN conda install gensim
-
-RUN conda install scikit-learn
+RUN conda install pytorch biopython scikit-learn
 
 ADD . .
