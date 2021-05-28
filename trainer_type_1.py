@@ -107,7 +107,7 @@ class Trainer:
             for x_batch, y_batch in test_reverse_loader:
                 output = self.model_reverse(x_batch)
                 all_outputs_reverse = torch.cat((all_outputs_reverse,output),0)
-
+        
             if self.fr_result == "average":
                 result = (all_outputs_reverse + all_outputs_forward)/2
             elif self.fr_result == "max":
