@@ -16,12 +16,6 @@ Run the docker container:
 
 # Commands
 ```
-usage: train.py [-h] --vir_train_set VIR_TRAIN_SET --bac_train_set BAC_TRAIN_SET --vir_test_set VIR_TEST_SET --bac_test_set BAC_TEST_SET [--batch_size BATCH_SIZE] [--learning_rate LEARNING_RATE]
-                [--n_epochs N_EPOCHS] [--train_fragment_length TRAIN_FRAGMENT_LENGTH] [--conv_layers_num CONV_LAYERS_NUM] [--conv_kernel_size CONV_KERNEL_SIZE] [--pool_kernel_size POOL_KERNEL_SIZE]
-                [--fc_size FC_SIZE] [--cnn_type CNN_TYPE] [--fr_result FR_RESULT]
-
-optional arguments:
-
   -h, --help            show this help message and exit
   
   --vir_train_set VIR_TRAIN_SET
