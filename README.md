@@ -9,11 +9,9 @@ Build docker container:
 
 Run the docker container:
 
-```docker run -v /path/to/input:/input dvf python train.py --vir_train_set input/vir_train.fasta \
-  --bac_train_set input/bac_train.fasta \
-  --vir_test_set input/vir_test.fasta \
-  --bac_test_set  input/bac_test.fasta
- ```
+```
+docker run -v /path/to/input:/input dvf python train.py --vir_train_set input/vir_train.fasta --bac_train_set input/bac_train.fasta --vir_test_set input/vir_test.fasta --bac_test_set  input/bac_test.fasta
+```
 
 # Commands
 
