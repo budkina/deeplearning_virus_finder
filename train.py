@@ -34,7 +34,7 @@ if __name__ == "__main__":
         default = 1000,
         help='Fragment length')
     parser.add_argument('--conv_layers_num',
-        default=10,
+        default=32,
         help='Number of convolutional modules')
     parser.add_argument('--conv_kernel_size',
         default=5,
